@@ -1,0 +1,15 @@
+---
+
+  - name: "APT - install packages"
+    apt:
+      name: "{{ item }}"
+      update_cache: yes
+    with_items:
+      - "mc"
+      - "htop"
+      - "net-tools"
+      - "aptitude"
+      - "apt-transport-https"
+      - "ca-certificates"
+      - "curl"
+      - "software-properties-common"

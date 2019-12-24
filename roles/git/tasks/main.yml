@@ -1,0 +1,15 @@
+---
+
+  - name: "Install git"
+    apt:
+      name: git
+      state: present
+      update_cache: yes
+
+  - name: "Generate ssh keypair"
+    openssh_keypair:
+      path: ~/.ssh/id_ssh_rsa
+    register: openssh_keypair
+
+  - debug:
+      var: openssh_keypair.public_key

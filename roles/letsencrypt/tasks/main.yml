@@ -1,0 +1,37 @@
+---
+
+  - name: "ADD Cerbot"
+    apt_repository:
+      repo: "ppa:certbot/certbot"
+
+  - name: "APT - install packages"
+    apt:
+      name: "{{ item }}"
+      update_cache: yes
+    with_items:
+      - "apt-transport-https"
+      - "ca-certificates"
+      - "software-properties-common"
+      - "certbot"
+      - "python-certbot-apache"
+
+  - name: "Create folder for letsencrypt"
+    copy:
+      src: tmp/var/www/letsencrypt/
+      dest: /var/www/letsencrypt/
+
+  - name: "Create letsencrypt script"
+    copy:
+      src: tmp/opt/scripts/letsencrypt/
+      dest: /opt/scripts/
+
+  - name: "Creates template config from sites-available"
+    copy:
+      src: tmp/letsencrypt/template
+      dest: /etc/nginx/sites-available/
+
+  - name: "Create cron job ssl certs update"
+    cron:
+      name: "ssl certs update"
+      special_time: daily
+      job: "certbot renew --noninteractive --renew-hook /opt/scripts/nginx_reload.sh"
